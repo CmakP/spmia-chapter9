@@ -25,8 +25,8 @@ public class OrganizationService {
 
     private static final Logger logger = LoggerFactory.getLogger(OrganizationService.class);
 
-    public Organization getOrg
-            (String organizationId) {
+    public Organization getOrg (String organizationId) {
+        // add a custom span, called getOrgDbCall
         Span newSpan = tracer.createSpan("getOrgDBCall");
 
         logger.debug("In the organizationService.getOrg() call");

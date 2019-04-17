@@ -46,6 +46,7 @@
       <artifactId>spring-cloud-config-client</artifactId>
     </dependency>
 
+      <!--This will cause a trace ID to be generated for every service being called in Zuul-->
       <dependency>
           <groupId>org.springframework.cloud</groupId>
           <artifactId>spring-cloud-starter-sleuth</artifactId>

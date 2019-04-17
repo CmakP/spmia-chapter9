@@ -19,6 +19,7 @@ public class OrganizationRestTemplateClient {
     @Autowired
     RestTemplate restTemplate;
 
+    //The Tracer class is used to programmatically access the Spring Cloud Sleuth trace information
     @Autowired
     Tracer tracer;
 
@@ -28,6 +29,7 @@ public class OrganizationRestTemplateClient {
     private static final Logger logger = LoggerFactory.getLogger(OrganizationRestTemplateClient.class);
 
     private Organization checkRedisCache(String organizationId) {
+        // For your custom span, create a new span called “readLicensingDataFromRedis”
        Span newSpan = tracer.createSpan("readLicensingDataFromRedis");
         try {
             return orgRedisRepo.findOrganization(organizationId);
@@ -37,8 +39,11 @@ public class OrganizationRestTemplateClient {
             return null;
         }
         finally {
+          //You can add tag information to the span. Here you provide the name of the service that’s going to be captured by Zipkin
           newSpan.tag("peer.service", "redis");
+          //Log an event to tell Spring Cloud Sleuth that it should capture the time when the call is complete.
           newSpan.logEvent(org.springframework.cloud.sleuth.Span.CLIENT_RECV);
+          //If you don’t call the close() method, you’ll get error messages in the logs indicating that a span has been left open
           tracer.close(newSpan);
         }
     }
